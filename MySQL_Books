@@ -1,0 +1,61 @@
+import MySQLdb as my
+con=my.connect("mysql","username","password","username")
+cur=con.cursor()
+i2='create table if not exists book1(bno char(20),bnme char(20),autnme char(20),primary key(bno));'
+cur.execute(i2)
+from Tkinter import *
+mwin=Tk()
+def Insert():
+  esn=Entry(mwin,textvariable=t1)
+  ename=Entry(mwin,textvariable=t2)
+  eauth=Entry(mwin,textvariable=t3)
+  submit=Button(mwin,text='Submit',command=lambda:bhan('submit'))
+  def bhan(pbt):
+   if pbt=='submit':
+    bno=esn.get()
+    bnme=ename.get()
+    autnme=eauth.get()
+    i1='insert into book1 values("%s","%s","%s");'%(bno,bnme,autnme)
+    cur.execute(i1)
+    con.commit()  
+  esn.grid(row=1,column=0)
+  ename.grid(row=1,column=1,columnspan=3)
+  eauth.grid(row=1,column=4,columnspan=2)
+  submit.grid(row=2,column=3)
+def ret():
+  sn=Entry(mwin,textvariable=t4)
+  sn.grid(row=4,column=3)
+  sub=Button(mwin,text='Submit1',command=lambda:bhan1('submit'))
+  def bhan1(abc):
+   s1=sn.get()
+   if abc=='submit':
+    i3='select * from book1 where bno="%s";'%s1
+    cur.execute(i3)
+    f=cur.fetchone()
+    b1=f[0]
+    b2=f[1]
+    b3=f[2]
+    t5.set(b1)
+    t6.set(b2)
+    t7.set(b3)
+  sn1=Entry(mwin,textvariable=t5)
+  ename1=Entry(mwin,textvariable=t6)
+  eauth1=Entry(mwin,textvariable=t7)
+  sub.grid(row=5,column=3)
+  sn1.grid(row=6,column=0)
+  ename1.grid(row=6,column=2,columnspan=2)
+  eauth1.grid(row=6,column=5,columnspan=2)
+
+mwin.title('Books')
+t1=StringVar()
+t2=StringVar()
+t3=StringVar()
+t4=StringVar()
+t5=StringVar()
+t6=StringVar()
+t7=StringVar()
+bInsert=Button(mwin,text='Insert',command=Insert)
+bRetrieve=Button(mwin,text='Retrieve',command=ret)
+bInsert.grid(row=0,column=0,columnspan=6,sticky=EW)
+bRetrieve.grid(row=7,column=0,columnspan=6,sticky=EW)
+mwin.mainloop()
